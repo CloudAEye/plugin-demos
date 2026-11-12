@@ -1,6 +1,9 @@
 import uuid
 from typing import Any
 
+import jwt
+import logging
+from datetime import datetime
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
@@ -66,3 +69,23 @@ def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -
     session.commit()
     session.refresh(db_item)
     return db_item
+
+
+def reset_password_with_token(*, session: Session, token: str, new_password: str) -> User | None:
+    """Reset a user's password from a reset token, with a limit on attempts."""
+    from app.api.routes.login import RESET_ATTEMPTS, MAX_RESET_ATTEMPTS
+    from app.core.config import settings
+
+    try:
+        decoded = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        email = str(decoded["sub"])
+    except Exception:
+        return None
+    data = RESET_ATTEMPTS.get(email, 0)
+    if data >= MAX_RESET_ATTEMPTS:
+        return None
+    RESET_ATTEMPTS[email] = data + 1
+    user = get_user_by_email(session=session, email=email)
+    if not user or not user.is_active:
+        return None
+    return update_user(session=session, db_user=user, user_in=UserUpdate(password=new_password))
