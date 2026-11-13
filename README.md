@@ -148,6 +148,19 @@ git checkout demo-1/reset-rate-limit
 Don't edit anything yet. The stored answers are for this exact change; once you edit a file, the
 commands tell you how to continue on your own fork.
 
+### Before a commit, or on a pull request
+
+The review commands work at both points: on the changes in your working tree before you commit, and
+on an open pull request once you push, given its number (`/cloudaeye:review #1`). That holds for
+`review`, `inspect`, `security`, `slop-score`, `review-arch`, `control-flow`, `risk-score` and
+`ultrareview`. On a pull request, `ultrareview`, `risk-score`, `review-arch` and `control-flow` also
+post their result as a comment.
+
+This demo runs every command before the commit, and shows the pull-request side with `ultrareview`
+alone: see [Review it as a pull request](#3-review-it-as-a-pull-request). A few commands work at one
+point only: `/cloudaeye:implement` edits your working tree, and `check`, `add-docs`, `add-tests`,
+`assign-reviewer` and `triage-prs` need a pull request.
+
 ### Run the commands
 
 Run these in Claude Code from the repository's root folder, in any order. Each one prints a short
@@ -191,6 +204,13 @@ Find out whether the change needs a human reviewer, and why:
 ```text
 /cloudaeye:risk-score
 ```
+
+**The history behind the risk card is staged.** Its trend sections read a repository's past: the
+author's earlier pull requests and their scores, reverts, the bugs reported in the changed files, and
+how much new code was rewritten. A copy of a project carries its git history and none of that, and
+GitHub cannot backdate it, so for this demo it is made up: the pull requests, the revert and the bug
+reports the card names are not on GitHub. Everything else on the card is computed from the
+repository: the change, who wrote the lines it touches, and its AI slop score.
 
 Run every check at once, opening with a merge verdict and a table of results:
 
