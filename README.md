@@ -5,9 +5,10 @@ on your own machine. Each demo is a folder holding one project, plus one change 
 from a vague ticket, the kind of change that reaches review every day. The change sits on a branch of
 its own.
 
-This repository is already connected to CloudAEye for everyone. Clone it, and the demo commands show
-the answers CloudAEye stored for each demo's change, at no cost. To change the code and review your
-own changes, you fork it and connect your fork to your own account; [Make your own changes](#make-your-own-changes)
+All you need to try it is the plugin and a free CloudAEye account: no fork, no GitHub App, nothing to
+connect. This repository is already connected to CloudAEye for everyone, so the demo commands show the
+answers CloudAEye stored for each demo's change, at no cost on any plan. To edit the code and review
+your own changes, fork it and run `/cloudaeye:init` on your fork; [Make your own changes](#make-your-own-changes)
 shows how.
 
 | Demo | Project | Stack | The change | Branch |
@@ -25,10 +26,15 @@ You do this once.
 
 ### What you need
 
-- A GitHub account.
 - Claude Code, installed and signed in.
 - Git, Python 3 and curl on your `PATH`. The plugin's commands run through them. On Windows, Git for
   Windows includes Git and curl, and Python comes from [python.org](https://www.python.org/downloads/).
+- A CloudAEye account to sign in with. Every command needs one, the free ones included, because that
+  is how CloudAEye knows who is asking. If you have none, sign up at
+  [console.cloudaeye.com/auth/sign-up](https://console.cloudaeye.com/auth/sign-up): the Free plan needs
+  no card.
+
+You do not need a GitHub account to try the demos. You need one only to [fork](#make-your-own-changes).
 
 To check, run these in a terminal. Each one should print a version:
 
@@ -42,12 +48,7 @@ claude --version
 On Windows, if `python3` prints nothing or opens the Microsoft Store, run `python --version`
 instead. The plugin tries both.
 
-### 1. Create a CloudAEye account
-
-Sign up at [console.cloudaeye.com/auth/sign-up](https://console.cloudaeye.com/auth/sign-up). The Free
-plan needs no card, and the stored answers in these demos are free on every plan.
-
-### 2. Clone this repository
+### 1. Clone this repository
 
 ```bash
 git clone https://github.com/CloudAEye/plugin-demos.git
@@ -57,7 +58,7 @@ git clone https://github.com/CloudAEye/plugin-demos.git
 cd plugin-demos
 ```
 
-### 3. Install the plugin
+### 2. Install the plugin
 
 Start Claude Code in the repository's root folder:
 
@@ -90,9 +91,9 @@ claude plugin marketplace add CloudAEye/cloudaeye-plugin
 claude plugin install cloudaeye@cloudaeye
 ```
 
-### 4. Sign in
+### 3. Sign in
 
-In Claude Code:
+The plugin cannot reach CloudAEye until you sign in once. In Claude Code:
 
 ```text
 /mcp
@@ -105,16 +106,16 @@ In Claude Code:
 
 Claude Code keeps you signed in after this, and refreshes the sign-in on its own.
 
-### 5. Run init
+That is all the setup. The commands recognise this repository on their own, so you can go straight to
+[Demo 1](#demo-1-full-stack-fastapi-template).
 
-In Claude Code, from the repository's root folder:
+If you want the list in Claude Code, `/cloudaeye:init` prints the branch to check out for each demo and
+the commands that have stored answers. Here it connects nothing: that is only for
+[your own fork](#make-your-own-changes).
 
 ```text
 /cloudaeye:init
 ```
-
-It recognises this repository, so there is nothing to connect and no GitHub App to install. It prints
-the branch to check out for each demo and the commands that have stored answers.
 
 **Tip:** you can run a shell command without leaving Claude Code by starting the line with `!`, for
 example `!git status`.
