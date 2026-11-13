@@ -153,7 +153,7 @@ commands tell you how to continue on your own fork.
 
 This demo shows CloudAEye at the two points where a change gets reviewed:
 
-- **Before the commit**, on the demo's change in your working tree: the first seven commands in
+- **Before the commit**, on the demo's change in your working tree: the first six commands in
   [Run the commands](#run-the-commands) below.
 - **On a pull request**: `/cloudaeye:ultrareview #1`, the last one. It posted its report on
   [pull request #1](https://github.com/CloudAEye/plugin-demos/pull/1) and asked a reviewer to look.
@@ -216,15 +216,9 @@ GitHub cannot backdate it, so for this demo it is made up: the pull requests, th
 reports the card names are not on GitHub. Everything else on the card is computed from the
 repository: the change, who wrote the lines it touches, and its AI slop score.
 
-Run every check at once, opening with a merge verdict and a table of results:
-
-```text
-/cloudaeye:ultrareview
-```
-
-Run the same checks on the pull request, by its number. On a pull request, ultrareview also posts the
-report as a comment and suggests who should review; you can see that comment on
-[pull request #1](https://github.com/CloudAEye/plugin-demos/pull/1):
+Run every check at once on the pull request, by its number. The report opens with a merge verdict and
+a table of results; on a pull request it is also posted as a comment, with who should review. You can
+see that comment on [pull request #1](https://github.com/CloudAEye/plugin-demos/pull/1):
 
 ```text
 /cloudaeye:ultrareview #1
