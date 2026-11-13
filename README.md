@@ -1,52 +1,53 @@
 # CloudAEye plugin demos
 
-Real open-source projects for trying the [CloudAEye plugin for Claude Code](https://github.com/CloudAEye/cloudaeye-plugin)
-on your own machine. Each demo is a folder holding one project, plus one change a coding agent made
-from a vague ticket, the kind of change that reaches review every day. The change sits on a branch of
-its own.
+Try the [CloudAEye plugin for Claude Code](https://github.com/CloudAEye/cloudaeye-plugin) on real
+open-source projects, on your own machine.
 
-All you need to try it is the plugin and a free CloudAEye account: no fork, no GitHub App, nothing to
-connect. This repository is already connected to CloudAEye for everyone, so the demo commands show the
-answers CloudAEye stored for each demo's change, at no cost on any plan. To edit the code and review
-your own changes, fork it and run `/cloudaeye:init` on your fork; [Make your own changes](#make-your-own-changes)
-shows how.
+Each demo is one project plus one change a coding agent made from a vague ticket: the kind of change
+that reaches code review every day. The change sits on a branch of its own, and CloudAEye has already
+reviewed it, so every command answers in seconds.
+
+> [!NOTE]
+> **Nothing to set up on GitHub.** This repository is already connected to CloudAEye for everyone:
+> no fork, no GitHub App, nothing to connect. All you need is the plugin and a free CloudAEye account,
+> and the demo commands cost nothing on any plan.
 
 | Demo | Project | Stack | The change | Branch |
 |---|---|---|---|---|
 | 1 | [full-stack-fastapi-template](full-stack-fastapi-template/) | FastAPI, SQLModel, PostgreSQL, React | Rate-limit password reset | `demo-1/reset-rate-limit` |
 
-- [Set up](#set-up)
+**Contents**
+
+- [Quick start](#quick-start)
 - [Demo 1: full-stack-fastapi-template](#demo-1-full-stack-fastapi-template)
 - [Make your own changes](#make-your-own-changes)
 - [Troubleshooting](#troubleshooting)
 
-## Set up
+## Quick start
 
-You do this once.
+Three steps, done once.
 
-### What you need
+### Requirements
 
-- Claude Code, installed and signed in.
-- Git, Python 3 and curl on your `PATH`. The plugin's commands run through them. On Windows, Git for
-  Windows includes Git and curl, and Python comes from [python.org](https://www.python.org/downloads/).
-- A CloudAEye account to sign in with. Every command needs one, the free ones included, because that
-  is how CloudAEye knows who is asking. If you have none, sign up at
-  [console.cloudaeye.com/auth/sign-up](https://console.cloudaeye.com/auth/sign-up): the Free plan needs
-  no card.
+- **Claude Code**, installed and signed in.
+- **Git** and **Python 3** on your `PATH`: the plugin's commands run through them.
+  - On Windows, [Git for Windows](https://git-scm.com/download/win) provides Git, and Python comes
+    from [python.org](https://www.python.org/downloads/).
+- **A CloudAEye account** to sign in with. Every command needs one, the free ones included.
+  - No account yet? [Sign up](https://console.cloudaeye.com/auth/sign-up): the Free plan needs no card.
 
-You do not need a GitHub account to try the demos. You need one only to [fork](#make-your-own-changes).
+You do **not** need a GitHub account to try the demos, only to [fork](#make-your-own-changes).
 
 To check, run these in a terminal. Each one should print a version:
 
 ```bash
 git --version
 python3 --version
-curl --version
 claude --version
 ```
 
-On Windows, if `python3` prints nothing or opens the Microsoft Store, run `python --version`
-instead. The plugin tries both.
+On Windows, if `python3` prints nothing or opens the Microsoft Store, run `python --version` instead.
+The plugin tries both.
 
 ### 1. Clone this repository
 
@@ -76,12 +77,12 @@ Then type these in Claude Code, one at a time:
 /plugin install cloudaeye@cloudaeye
 ```
 
-Claude Code may offer some settings during the install. They are all optional, so you can skip them.
+- The install may offer some settings. They are all optional: skip them.
+- **Restart Claude Code now:** type `/exit`, then run `claude` again. The commands appear straight
+  away, but the connection to CloudAEye only starts when Claude Code starts.
 
-**Restart Claude Code now.** Type `/exit`, then run `claude` again. The commands appear right after the
-install, but the connection to CloudAEye's server only starts when Claude Code starts.
-
-If you prefer a terminal to Claude Code, these two commands do the same install:
+<details>
+<summary>Prefer a terminal? The same install in two commands</summary>
 
 ```bash
 claude plugin marketplace add CloudAEye/cloudaeye-plugin
@@ -90,6 +91,8 @@ claude plugin marketplace add CloudAEye/cloudaeye-plugin
 ```bash
 claude plugin install cloudaeye@cloudaeye
 ```
+
+</details>
 
 ### 3. Sign in
 
@@ -104,21 +107,16 @@ The plugin cannot reach CloudAEye until you sign in once. In Claude Code:
 3. Sign in with your CloudAEye account and allow access.
 4. When the browser says you are connected, go back to Claude Code.
 
-Claude Code keeps you signed in after this, and refreshes the sign-in on its own.
+Claude Code keeps you signed in from then on.
 
-That is all the setup. The commands recognise this repository on their own, so you can go straight to
+**That is all the setup.** The commands recognise this repository on their own, so go straight to
 [Demo 1](#demo-1-full-stack-fastapi-template).
 
-If you want the list in Claude Code, `/cloudaeye:init` prints the branch to check out for each demo and
-the commands that have stored answers. Here it connects nothing: that is only for
-[your own fork](#make-your-own-changes).
-
-```text
-/cloudaeye:init
-```
-
-**Tip:** you can run a shell command without leaving Claude Code by starting the line with `!`, for
-example `!git status`.
+> [!TIP]
+> - `/cloudaeye:init` prints the branch to check out for each demo and the commands you can try. Here
+>   it connects nothing: connecting is only for [your own fork](#make-your-own-changes).
+> - Run a shell command without leaving Claude Code by starting the line with `!`, for example
+>   `!git status`.
 
 ## Demo 1: full-stack-fastapi-template
 
@@ -126,19 +124,26 @@ Copied from [fastapi/full-stack-fastapi-template](https://github.com/fastapi/ful
 (MIT License, © 2019 Sebastián Ramírez), with its git history. Its own README and LICENSE are in the
 folder.
 
-**Description:** Two complaints reached support in the same week. One customer got dozens of
-"reset your password" emails they never asked for: someone was calling the password-recovery
-endpoint in a loop with a list of addresses. A few other users said the link in the reset email
-came back "Invalid token" when they clicked it. Product filed one ticket for both:
+### The scenario
 
-> Password reset is getting abused and sometimes the link doesn't work. Make reset more robust
-> and rate limit it.
+Two complaints reached support in the same week:
 
-The developer who picked it up gave the ticket to their coding agent as written. The agent added
-a limit of five attempts per email address to `POST /password-recovery/{email}` and moved the
-reset logic out of `POST /reset-password/` into a new `crud.reset_password_with_token`. The change
-touches two files, `backend/app/api/routes/login.py` and `backend/app/crud.py`, and nobody has
-reviewed it yet.
+- One customer got dozens of "reset your password" emails they never asked for: someone was calling
+  the password-recovery endpoint in a loop with a list of addresses.
+- A few other users said the link in the reset email came back "Invalid token" when they clicked it.
+
+Product filed one ticket for both:
+
+> Password reset is getting abused and sometimes the link doesn't work. Make reset more robust and
+> rate limit it.
+
+The developer who picked it up gave the ticket to their coding agent as written. The agent:
+
+- added a limit of five attempts per email address to `POST /password-recovery/{email}`;
+- moved the reset logic out of `POST /reset-password/` into a new `crud.reset_password_with_token`.
+
+The change touches two files, `backend/app/api/routes/login.py` and `backend/app/crud.py`, and nobody
+has reviewed it yet.
 
 ### Get the change
 
@@ -146,20 +151,24 @@ reviewed it yet.
 git checkout demo-1/reset-rate-limit
 ```
 
-Don't edit anything yet. The stored answers are for this exact change; once you edit a file, the
-commands tell you how to continue on your own fork.
+> [!IMPORTANT]
+> Don't edit anything yet. The stored answers are for this exact change; once you edit a file, the
+> commands tell you how to continue on your own fork.
 
-### What you can try here
+### What you can try
 
-This demo shows CloudAEye at the two points where a change gets reviewed:
+The demo shows CloudAEye at the two points where a change gets reviewed: **before the commit**, on the
+change in your working tree, and **on a pull request**, where the report is posted for the team.
 
-- **Before the commit**, on the demo's change in your working tree: the first six commands in
-  [Run the commands](#run-the-commands) below.
-- **On a pull request**: `/cloudaeye:ultrareview #1`, the last one. It posted its report on
-  [pull request #1](https://github.com/CloudAEye/plugin-demos/pull/1) and asked a reviewer to look.
-  Open it to see what your team would see on GitHub.
-
-Each one answers from what CloudAEye stored for this change, at no cost.
+| Command | What it shows | Runs on |
+|---|---|---|
+| `/cloudaeye:review` | Bugs and security issues, each with a number, file, line and severity | Before the commit |
+| `/cloudaeye:check-task` | Whether the change does what the ticket asked: DONE or NOT DONE, with what is missing | Before the commit |
+| `/cloudaeye:slop-score` | How much careful reading the change needs, as a score out of 100 with the findings behind it | Before the commit |
+| `/cloudaeye:review-arch` | What the change did to the architecture: the system, the layers and the change itself | Before the commit |
+| `/cloudaeye:control-flow` | The order of calls before and after the change, as sequence diagrams | Before the commit |
+| `/cloudaeye:risk-score` | Whether the change needs a human reviewer, and why | Before the commit |
+| `/cloudaeye:ultrareview #1` | Every check at once, with a merge verdict, posted on the pull request with who should review | On [pull request #1](https://github.com/CloudAEye/plugin-demos/pull/1) |
 
 Through the plugin, CloudAEye's commands work both ways: before a commit and on a pull request. See the
 [command guide](https://docs.cloudaeye.com/user-guide/mcp/skills.html) for details, and
@@ -167,76 +176,80 @@ Through the plugin, CloudAEye's commands work both ways: before a commit and on 
 
 ### Run the commands
 
-Run these in Claude Code from the repository's root folder, in any order. Each one prints a short
-card. The longer ones (`review-arch`, `control-flow`, `risk-score`, `slop-score`, `ultrareview`) also
-save the whole report, diagrams included, to `.cloudaeye/reports/<command>.md`. `/cloudaeye:init`
-prints the same list, so if the two ever differ, go by what init printed.
+Run these in Claude Code from the repository's root folder, in any order.
 
-Find bugs and security issues, each with a number, file, line and severity:
+- Each one prints a short card.
+- The longer ones also save the whole report, diagrams included, to `.cloudaeye/reports/<command>.md`.
+
+**Find bugs and security issues**
 
 ```text
 /cloudaeye:review
 ```
 
-Check whether the change does what the ticket asked. You get DONE or NOT DONE, with what is missing.
-Type the ticket exactly as written here, because the stored answer is for this text:
+**Check the change against the ticket.** Type the ticket exactly as written here, because the stored
+answer is for this text:
 
 ```text
 /cloudaeye:check-task Password reset is getting abused and sometimes the link doesn't work. Make reset more robust and rate limit it.
 ```
 
-See how much careful reading the change needs, as a score out of 100 with the findings behind it:
+**Score the AI slop**
 
 ```text
 /cloudaeye:slop-score
 ```
 
-See what the change did to the architecture: the system, the repository's layers and the change itself:
+**Review the architecture**
 
 ```text
 /cloudaeye:review-arch
 ```
 
-See the order of calls before and after the change, as sequence diagrams:
+**Draw the control flow**
 
 ```text
 /cloudaeye:control-flow
 ```
 
-Find out whether the change needs a human reviewer, and why:
+**Score the change's risk**
 
 ```text
 /cloudaeye:risk-score
 ```
 
-**The history behind the risk card is staged.** Its trend sections read a repository's past: the
-author's earlier pull requests and their scores, reverts, the bugs reported in the changed files, and
-how much new code was rewritten. A copy of a project carries its git history and none of that, and
-GitHub cannot backdate it, so for this demo it is made up: the pull requests, the revert and the bug
-reports the card names are not on GitHub. Everything else on the card is computed from the
-repository: the change, who wrote the lines it touches, and its AI slop score.
+> [!NOTE]
+> **The history behind the risk card is staged.** Its trend sections read a repository's past: the
+> author's earlier pull requests and their scores, reverts, the bugs reported in the changed files, and
+> how much new code was rewritten. A copy of a project carries its git history and none of that, and
+> GitHub cannot backdate it, so for this demo it is made up: the pull requests, the revert and the bug
+> reports the card names are not on GitHub. Everything else on the card is computed from the
+> repository: the change, who wrote the lines it touches, and its AI slop score.
 
-Run every check at once on the pull request, by its number. The report opens with a merge verdict and
-a table of results; on a pull request it is also posted as a comment, with who should review. You can
-see that comment on [pull request #1](https://github.com/CloudAEye/plugin-demos/pull/1):
+**Run every check on the pull request.** The report opens with a merge verdict and a table of
+results, and on a pull request it is posted as one comment, with who should review. See it on
+[pull request #1](https://github.com/CloudAEye/plugin-demos/pull/1):
 
 ```text
 /cloudaeye:ultrareview #1
 ```
 
-Any other command, such as `/cloudaeye:implement` to plan a fix, runs only on your own fork. The
+Any other command, such as `/cloudaeye:implement` to plan a fix, runs on your own fork only. The
 command says so and shows how.
 
 ## Make your own changes
 
-To edit the code, plan fixes with `/cloudaeye:implement`, or open pull requests, fork this repository
-and connect the fork to your own CloudAEye account. From then on every command runs live on your
-fork, on your own account and credits.
+Fork this repository and connect the fork to your own CloudAEye account to:
 
-The Free plan runs `/cloudaeye:review`, `/cloudaeye:inspect`, `/cloudaeye:describe` and
-`/cloudaeye:ask`. The other commands need the Pro plan;
-[Pricing](https://docs.cloudaeye.com/user-guide/code-review/billing/pricing.html) lists what each
-one costs.
+- edit the code and review your own changes;
+- plan fixes with `/cloudaeye:implement`;
+- open pull requests and run the pull-request commands on them.
+
+From then on every command runs live on your fork, on your own account and credits:
+
+- **Free plan:** `/cloudaeye:review`, `/cloudaeye:inspect`, `/cloudaeye:describe` and `/cloudaeye:ask`.
+- **Pro plan:** every other command. [Pricing](https://docs.cloudaeye.com/user-guide/code-review/billing/pricing.html)
+  lists what each one costs.
 
 ### 1. Fork and connect
 
@@ -246,8 +259,8 @@ With the [GitHub CLI](https://cli.github.com), from the repository's root folder
 gh repo fork CloudAEye/plugin-demos --remote
 ```
 
-This creates your fork on GitHub with all its branches, and makes it the `origin` remote of your
-clone. Then, in Claude Code:
+This creates your fork on GitHub with all its branches, and makes it the `origin` remote of your clone.
+Then, in Claude Code:
 
 ```text
 /cloudaeye:init
@@ -259,15 +272,20 @@ clone. Then, in Claude Code:
 3. Go back to Claude Code. `/cloudaeye:init` checks every ten seconds for up to five minutes, and
    reports the repository as initialized once the app can see it.
 
-CloudAEye then indexes your fork. If a command reports that the repository has no code graph yet,
-wait a few minutes and run the command again.
+CloudAEye then indexes your fork. If a command reports that the repository has no code graph yet, wait
+a few minutes and run it again.
 
-Without the GitHub CLI: fork on github.com, clear **"Copy the main branch only"**, then point your
-clone at the fork, replacing `<your-username>`:
+<details>
+<summary>Without the GitHub CLI</summary>
+
+Fork on github.com and clear **"Copy the main branch only"**, then point your clone at the fork,
+replacing `<your-username>`:
 
 ```bash
 git remote set-url origin https://github.com/<your-username>/plugin-demos.git
 ```
+
+</details>
 
 ### 2. Fix a finding
 
@@ -278,8 +296,9 @@ Claude Code edits the files:
 /cloudaeye:implement [1]
 ```
 
-Replace `1` with the number you picked, or list several, like `[1,3]`. Run `/cloudaeye:review` again
-afterwards to see whether the fix landed. To put the demo back the way it was:
+- Replace `1` with the number you picked, or list several, like `[1,3]`.
+- Run `/cloudaeye:review` again afterwards to see whether the fix landed.
+- To put the demo back the way it was:
 
 ```bash
 git restore .
@@ -287,49 +306,51 @@ git restore .
 
 ### 3. Review it as a pull request
 
-Open a pull request in **your fork**, from `demo-1/reset-rate-limit` into `main`. On github.com,
-GitHub suggests `CloudAEye/plugin-demos` as the base repository; change it to your fork. With the
-GitHub CLI, replacing `<your-username>`:
+Open a pull request in **your fork**, from `demo-1/reset-rate-limit` into `main`. On github.com, GitHub
+suggests `CloudAEye/plugin-demos` as the base repository: change it to your fork. With the GitHub CLI,
+replacing `<your-username>`:
 
 ```bash
 gh pr create --repo <your-username>/plugin-demos --base main --head demo-1/reset-rate-limit --title "Rate-limit password reset" --body "Password reset is getting abused and sometimes the link doesn't work. Make reset more robust and rate limit it."
 ```
 
-Note the pull request's number. The commands below use `#1`, so put your own number in its place.
+The commands below use `#1`: put your own pull request's number in its place.
 
-Run every check on the pull request and post the whole report as one comment:
+**Run every check and post the report as one comment**
 
 ```text
 /cloudaeye:ultrareview #1
 ```
 
-Score the pull request's risk and post the risk card on it:
+**Score the risk and post the risk card**
 
 ```text
 /cloudaeye:risk-score #1
 ```
 
-Find out who should review it and what they should check:
+**Find who should review it, and what they should check**
 
 ```text
 /cloudaeye:assign-reviewer #1
 ```
 
-Nobody reviews their own pull request. In a personal fork, you are often the only person with
+Nobody reviews their own pull request, and in a personal fork you are often the only person with
 access, so this command may find nobody to suggest. Add collaborators to your fork to see it choose
 between people.
 
-Find out which open pull request to review next, across every repository you connected:
+**Pick the next pull request to review, across every repository you connected**
 
 ```text
 /cloudaeye:triage-prs
 ```
 
-**What gets written to GitHub:** on a pull request in your fork, `ultrareview`, `risk-score`,
-`review-arch` and `control-flow` post a comment. They post once per commit, and some edit their
-comment when you run them again. `assign-reviewer` requests a review from the recommended reviewer
-when that person can review in the repository. Add `just suggest` after the number to get the
-suggestion without the request. Nothing is ever written to `CloudAEye/plugin-demos` itself.
+> [!NOTE]
+> **What gets written to GitHub**
+> - On a pull request in your fork, `ultrareview`, `risk-score`, `review-arch` and `control-flow` post
+>   a comment: once per commit, and some edit their comment when you run them again.
+> - `assign-reviewer` requests a review from the recommended reviewer when that person can review in
+>   the repository. Add `just suggest` after the number to get the suggestion without the request.
+> - Nothing is ever written to `CloudAEye/plugin-demos` itself.
 
 ## Troubleshooting
 
@@ -341,10 +362,13 @@ suggestion without the request. Nothing is ever written to `CloudAEye/plugin-dem
 | `/mcp` shows CloudAEye as **Needs authentication** | Choose it in `/mcp`, then **Authenticate**. |
 | `cloudaeye_error=python_not_found` | Install Python 3 and make sure it is on your `PATH`. |
 | A command says your working tree differs from the demo's change | You edited a file, or you are not on the demo's branch. Run `git status`, then `git restore .` or check out the branch again. To keep your edits, [fork](#make-your-own-changes). |
-| A command says it has no stored answer | Only the commands init lists have one. Run anything else on [your own fork](#make-your-own-changes). |
+| A command says it has no stored answer | Only the commands in [What you can try](#what-you-can-try) have one. Run anything else on [your own fork](#make-your-own-changes). |
 | `ambiguous_remote` from `/cloudaeye:init` | Your clone has several git remotes and none is named `origin`. `git remote -v` lists them. Name your fork's remote `origin`. |
 | A command says it needs the Pro plan | On your fork, the Free plan runs `review`, `inspect`, `describe` and `ask`. See [Pricing](https://docs.cloudaeye.com/user-guide/code-review/billing/pricing.html). |
 | A pull-request command says the pull request "comes from" another repository | The pull request was opened against `CloudAEye/plugin-demos`. Open it in your fork instead. |
 
-The plugin's full guide is at [docs.cloudaeye.com](https://docs.cloudaeye.com/user-guide/mcp/setup-claude-code.html).
-For anything else, write to [support@cloudaeye.com](mailto:support@cloudaeye.com).
+## Help
+
+- The plugin's full guide: [docs.cloudaeye.com](https://docs.cloudaeye.com/user-guide/mcp/setup-claude-code.html)
+- Every command and its options: [command guide](https://docs.cloudaeye.com/user-guide/mcp/skills.html)
+- Anything else: [support@cloudaeye.com](mailto:support@cloudaeye.com)
