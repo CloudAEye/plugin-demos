@@ -149,18 +149,23 @@ git checkout demo-1/reset-rate-limit
 Don't edit anything yet. The stored answers are for this exact change; once you edit a file, the
 commands tell you how to continue on your own fork.
 
-### Before a commit, or on a pull request
+### What you can try here
 
-The review commands work at both points: on the changes in your working tree before you commit, and
-on an open pull request once you push, given its number (`/cloudaeye:review #1`). That holds for
-`review`, `inspect`, `security`, `slop-score`, `review-arch`, `control-flow`, `risk-score` and
-`ultrareview`. On a pull request, `ultrareview`, `risk-score`, `review-arch` and `control-flow` also
-post their result as a comment.
+This demo shows CloudAEye at the two points where a change gets reviewed:
 
-This demo runs every command before the commit, and shows the pull-request side with `ultrareview`
-alone: see [Review it as a pull request](#3-review-it-as-a-pull-request). A few commands work at one
-point only: `/cloudaeye:implement` edits your working tree, and `check`, `add-docs`, `add-tests`,
-`assign-reviewer` and `triage-prs` need a pull request.
+- **Before the commit**, on the demo's change in your working tree: the seven commands in
+  [Run the commands](#run-the-commands) below. Each one answers from what CloudAEye stored for this
+  change, at no cost.
+- **On a pull request**: `/cloudaeye:ultrareview #1` posted its report on
+  [pull request #1](https://github.com/CloudAEye/plugin-demos/pull/1) and asked a reviewer to look.
+  Open it to see what your team would see on GitHub.
+
+These commands have both versions: the ones shown before the commit also run on a pull request, given
+its number (all but `check-task`, which checks a task against your working tree), and `ultrareview`
+also runs before the commit. The
+[command guide](https://docs.cloudaeye.com/user-guide/mcp/skills.html) covers each command and its
+options. To try them all, on your own changes and your own pull requests,
+[fork this repository](#make-your-own-changes).
 
 ### Run the commands
 
