@@ -153,12 +153,13 @@ commands tell you how to continue on your own fork.
 
 This demo shows CloudAEye at the two points where a change gets reviewed:
 
-- **Before the commit**, on the demo's change in your working tree: the seven commands in
-  [Run the commands](#run-the-commands) below. Each one answers from what CloudAEye stored for this
-  change, at no cost.
-- **On a pull request**: `/cloudaeye:ultrareview #1` posted its report on
+- **Before the commit**, on the demo's change in your working tree: the first seven commands in
+  [Run the commands](#run-the-commands) below.
+- **On a pull request**: `/cloudaeye:ultrareview #1`, the last one. It posted its report on
   [pull request #1](https://github.com/CloudAEye/plugin-demos/pull/1) and asked a reviewer to look.
   Open it to see what your team would see on GitHub.
+
+Each one answers from what CloudAEye stored for this change, at no cost.
 
 Through the plugin, CloudAEye's commands work both ways: before a commit and on a pull request. See the
 [command guide](https://docs.cloudaeye.com/user-guide/mcp/skills.html) for details, and
@@ -219,6 +220,14 @@ Run every check at once, opening with a merge verdict and a table of results:
 
 ```text
 /cloudaeye:ultrareview
+```
+
+Run the same checks on the pull request, by its number. On a pull request, ultrareview also posts the
+report as a comment and suggests who should review; you can see that comment on
+[pull request #1](https://github.com/CloudAEye/plugin-demos/pull/1):
+
+```text
+/cloudaeye:ultrareview #1
 ```
 
 Any other command, such as `/cloudaeye:implement` to plan a fix, runs only on your own fork. The
