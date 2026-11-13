@@ -160,12 +160,9 @@ This demo shows CloudAEye at the two points where a change gets reviewed:
   [pull request #1](https://github.com/CloudAEye/plugin-demos/pull/1) and asked a reviewer to look.
   Open it to see what your team would see on GitHub.
 
-These commands have both versions: the ones shown before the commit also run on a pull request, given
-its number (all but `check-task`, which checks a task against your working tree), and `ultrareview`
-also runs before the commit. The
-[command guide](https://docs.cloudaeye.com/user-guide/mcp/skills.html) covers each command and its
-options. To try them all, on your own changes and your own pull requests,
-[fork this repository](#make-your-own-changes).
+Through the plugin, CloudAEye's commands work both ways: before a commit and on a pull request. See the
+[command guide](https://docs.cloudaeye.com/user-guide/mcp/skills.html) for details, and
+[fork this repository](#make-your-own-changes) to try them all on your own changes.
 
 ### Run the commands
 
