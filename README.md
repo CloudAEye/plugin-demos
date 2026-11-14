@@ -233,6 +233,7 @@ results, and on a pull request it is posted as one comment, with who should revi
 ```text
 /cloudaeye:ultrareview #1
 ```
+See the `ultrareview` output  [here](https://github.com/CloudAEye/plugin-demos/pull/1#issuecomment-6843378130)
 
 Any other command, such as `/cloudaeye:implement` to plan a fix, runs on your own fork only. The
 command says so and shows how.
