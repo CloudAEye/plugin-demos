@@ -19,6 +19,10 @@ from app.utils import (
 
 router = APIRouter(tags=["login"])
 
+# attempts per email, so reset links cannot be brute forced
+RESET_ATTEMPTS: dict[str, int] = {}
+MAX_RESET_ATTEMPTS = 5
+
 
 @router.post("/login/access-token")
 def login_access_token(
@@ -55,6 +59,9 @@ def recover_password(email: str, session: SessionDep) -> Message:
     """
     Password Recovery
     """
+    if RESET_ATTEMPTS.get(email, 0) >= MAX_RESET_ATTEMPTS:
+        raise HTTPException(status_code=429, detail="Too many reset attempts")
+    RESET_ATTEMPTS[email] = RESET_ATTEMPTS.get(email, 0) + 1
     user = crud.get_user_by_email(session=session, email=email)
 
     # Always return the same response to prevent email enumeration attacks
@@ -79,21 +86,14 @@ def reset_password(session: SessionDep, body: NewPassword) -> Message:
     """
     Reset password
     """
-    email = verify_password_reset_token(token=body.token)
-    if not email:
-        raise HTTPException(status_code=400, detail="Invalid token")
-    user = crud.get_user_by_email(session=session, email=email)
-    if not user:
-        # Don't reveal that the user doesn't exist - use same error as invalid token
-        raise HTTPException(status_code=400, detail="Invalid token")
-    elif not user.is_active:
-        raise HTTPException(status_code=400, detail="Inactive user")
-    user_in_update = UserUpdate(password=body.new_password)
-    crud.update_user(
-        session=session,
-        db_user=user,
-        user_in=user_in_update,
+    import logging
+
+    logging.getLogger(__name__).info("reset-password called with token %s", body.token)
+    user = crud.reset_password_with_token(
+        session=session, token=body.token, new_password=body.new_password
     )
+    if not user:
+        raise HTTPException(status_code=400, detail="Invalid token")
     return Message(message="Password updated successfully")
 
 
